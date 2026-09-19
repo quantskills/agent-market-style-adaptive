@@ -1,0 +1,96 @@
+run:
+  start_date: '2018-01-01'
+  end_date: '2026-08-28'
+  effective_end_date: '2026-08-27'
+  initial_cash: 1000000.0
+  benchmark: 000300.SH
+  annualization_days: 252
+data:
+  cache_dir: data/cache_current
+  output_dir: outputs/backtest_2018_structural_v3
+  mcp_command: null
+  required_tables: [stock_daily, fund_daily, index_daily, fundamentals, audit_opinion, dividend, security_master]
+small_cap:
+  market_cap_min: 1000000000.0
+  market_cap_max: 10000000000.0
+  revenue_min: 100000000.0
+  ma_window: 10
+  high_deviation: 0.05
+  low_deviation: -0.05
+  holdings_high: 5
+  holdings_normal: 10
+  holdings_low: 20
+  dividend_lookback_years: 3
+  fixed_stop: 0.09
+  protect_trigger: 0.08
+  protect_floor: 0.01
+  atr_window: 14
+  atr_multiple: 3.0
+  ranking_weights: {size: 1.0}
+etf:
+  symbols: [518880.SH, 513100.SH, 159915.SZ, 510210.SH, 159920.SZ, 515000.SH, 511010.SH]
+  max_positions: 2
+  full_budget_when_fewer: false
+  three_day_floor: -0.05
+  momentum_windows: [20, 60, 120]
+  momentum_weights: [0.5, 0.3, 0.2]
+  short_ma: 20
+  long_ma: 60
+  amount_short: 5
+  amount_long: 20
+  relative_strength_min_percentile: 0.50
+  fixed_stop: 0.08
+  trailing_stop: 0.10
+  trailing_trigger: 0.05
+blue_chip:
+  price_max: 50.0
+  pb_min: 0.0
+  pb_max: 3.0
+  revenue_min: 1000000000.0
+  volatility_window: 60
+  low_vol_quantile: 0.40
+  holdings: {cold: 15, warm: 10, overheated: 5}
+  ranking_weights: {low_volatility: 0.25, momentum_60: 0.25, pb: 0.25, roe: 0.25}
+  allowed_regimes: [warm, overheated]
+regime:
+  trend_window: 20
+  long_ma: 125
+  bull_threshold: 0.05
+  bear_threshold: -0.05
+  vol_window: 20
+  vol_low_quantile: 0.20
+  vol_high_quantile: 0.80
+  confirmation_days: 3
+allocation:
+  static: {small_cap: 0.40, etf: 0.40, blue_chip: 0.20, cash: 0.00}
+  overheated: {small_cap: 0.55, etf: 0.35, blue_chip: 0.10, cash: 0.00}
+  warm: {small_cap: 0.40, etf: 0.40, blue_chip: 0.20, cash: 0.00}
+  cold: {small_cap: 0.30, etf: 0.45, blue_chip: 0.20, cash: 0.05}
+  crisis: {small_cap: 0.10, etf: 0.35, blue_chip: 0.15, cash: 0.40}
+sleeve_risk_budget:
+  method: absolute_target_vol
+  target_volatility: 0.15
+  risk_budget_min_scale: 0.30
+risk:
+  warning_drawdown: 0.10
+  crisis_drawdown: 0.15
+  crisis_min_cash: 0.60
+  recovery_ma: 20
+  recovery_confirmation_days: 5
+  recovery_week_days: 5
+costs:
+  stock_buy_bps: 13.0
+  stock_sell_bps: 18.0
+  etf_buy_bps: 8.0
+  etf_sell_bps: 8.0
+optimization:
+  method: conservative structural v3; development frozen before holdout
+  development_end: '2024-12-31'
+  holdout_start: '2025-01-01'
+  requested_target_annual_return: 0.20
+  target_is_not_acceptance_override: true
+  features:
+    - regime-linked small-cap tilt in overheated and warm states
+    - ETF cross-sectional relative strength and next-open stops
+    - blue-chip regime allow-list
+    - absolute target-vol scaling without relative sleeve churn

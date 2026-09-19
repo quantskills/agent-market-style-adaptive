@@ -1,0 +1,11 @@
+name: global-etf-rotation
+entrypoint: SKILL.md
+canonical_root: SKILL.md
+runnable:
+  language: python
+  command: python skills/skill-global-etf-rotation/examples/run_etf_rotation.py
+  outputs: [selection.json, evidence.csv]
+interface:
+  display_name: "全球 ETF 趋势轮动"
+  short_description: "基于 PandaData 点时证据执行全球 ETF 趋势轮动，输出可追溯候选和筛选指标"
+  default_prompt: "使用 $global-etf-rotation 执行单日策略研究，读取缓存并输出候选及证据。"

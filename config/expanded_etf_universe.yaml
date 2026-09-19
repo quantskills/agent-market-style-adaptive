@@ -1,0 +1,35 @@
+run:
+  start_date: "2016-06-01"
+  end_date: "2026-05-30"
+  effective_end_date: "2026-05-29"
+  initial_cash: 1000000.0
+  benchmark: "000300.SH"
+  annualization_days: 252
+data:
+  cache_dir: "data/cache_expanded_etf"
+  output_dir: "outputs/expanded_etf_data"
+  mcp_command: null
+  required_tables: [stock_daily, fund_daily, index_daily, fundamentals, audit_opinion, dividend, security_master]
+small_cap: {market_cap_min: 1000000000.0, market_cap_max: 10000000000.0, revenue_min: 100000000.0, ma_window: 10, high_deviation: 0.05, low_deviation: -0.05, holdings_high: 5, holdings_normal: 10, holdings_low: 20, dividend_lookback_years: 3, fixed_stop: 0.09, protect_trigger: 0.08, protect_floor: 0.01, atr_window: 14, atr_multiple: 3.0}
+etf:
+  # Existing global/defensive funds plus broad China equity, sector and overseas exposures.
+  # Listing-date eligibility remains enforced by select_etfs.
+  symbols: ["518880.SH", "513100.SH", "159915.SZ", "510210.SH", "159920.SZ", "515000.SH", "511010.SH", "510300.SH", "510500.SH", "510050.SH", "512100.SH", "512010.SH", "512480.SH", "515790.SH", "159941.SZ"]
+  max_positions: 2
+  three_day_floor: -0.05
+  momentum_windows: [20, 60, 120]
+  momentum_weights: [0.5, 0.3, 0.2]
+  short_ma: 20
+  long_ma: 60
+  amount_short: 5
+  amount_long: 20
+blue_chip: {price_max: 50.0, pb_min: 0.0, pb_max: 3.0, revenue_min: 1000000000.0, volatility_window: 60, low_vol_quantile: 0.30, holdings: {cold: 15, warm: 10, overheated: 5}}
+regime: {trend_window: 20, long_ma: 125, bull_threshold: 0.05, bear_threshold: -0.05, vol_window: 20, vol_low_quantile: 0.20, vol_high_quantile: 0.80, confirmation_days: 3}
+allocation:
+  static: {small_cap: 0.40, etf: 0.40, blue_chip: 0.20, cash: 0.00}
+  overheated: {small_cap: 0.50, etf: 0.40, blue_chip: 0.10, cash: 0.00}
+  warm: {small_cap: 0.40, etf: 0.40, blue_chip: 0.20, cash: 0.00}
+  cold: {small_cap: 0.15, etf: 0.45, blue_chip: 0.30, cash: 0.10}
+  crisis: {small_cap: 0.00, etf: 0.40, blue_chip: 0.20, cash: 0.40}
+risk: {warning_drawdown: 0.10, crisis_drawdown: 0.15, crisis_min_cash: 0.60, recovery_ma: 20, recovery_confirmation_days: 5, recovery_week_days: 5}
+costs: {stock_buy_bps: 13.0, stock_sell_bps: 18.0, etf_buy_bps: 8.0, etf_sell_bps: 8.0}

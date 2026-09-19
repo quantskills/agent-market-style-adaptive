@@ -1,0 +1,138 @@
+run:
+  start_date: '2018-01-01'
+  end_date: '2026-05-30'
+  effective_end_date: '2026-05-29'
+  initial_cash: 1000000.0
+  benchmark: 000300.SH
+  annualization_days: 252
+data:
+  cache_dir: data/cache
+  output_dir: outputs/backtest_2018_cached
+  mcp_command: null
+  required_tables:
+  - stock_daily
+  - fund_daily
+  - index_daily
+  - fundamentals
+  - audit_opinion
+  - dividend
+  - security_master
+small_cap:
+  market_cap_min: 1000000000.0
+  market_cap_max: 10000000000.0
+  revenue_min: 100000000.0
+  ma_window: 10
+  high_deviation: 0.05
+  low_deviation: -0.05
+  holdings_high: 5
+  holdings_normal: 10
+  holdings_low: 20
+  dividend_lookback_years: 3
+  fixed_stop: 0.09
+  protect_trigger: 0.08
+  protect_floor: 0.01
+  atr_window: 14
+  atr_multiple: 3.0
+  ranking_weights: &id001
+    size: 1.0
+etf:
+  symbols:
+  - 518880.SH
+  - 513100.SH
+  - 159915.SZ
+  - 510210.SH
+  - 159920.SZ
+  - 515000.SH
+  - 511010.SH
+  max_positions: 2
+  three_day_floor: -0.05
+  momentum_windows:
+  - 20
+  - 60
+  - 120
+  momentum_weights:
+  - 0.5
+  - 0.3
+  - 0.2
+  short_ma: 20
+  long_ma: 60
+  amount_short: 5
+  amount_long: 20
+blue_chip:
+  price_max: 50.0
+  pb_min: 0.0
+  pb_max: 3.0
+  revenue_min: 1000000000.0
+  volatility_window: 60
+  low_vol_quantile: 0.4
+  holdings:
+    cold: 15
+    warm: 10
+    overheated: 5
+  ranking_weights: &id002
+    low_volatility: 0.25
+    momentum_60: 0.25
+    pb: 0.25
+    roe: 0.25
+regime:
+  trend_window: 20
+  long_ma: 125
+  bull_threshold: 0.05
+  bear_threshold: -0.05
+  vol_window: 20
+  vol_low_quantile: 0.2
+  vol_high_quantile: 0.8
+  confirmation_days: 3
+allocation:
+  static:
+    small_cap: 0.4
+    etf: 0.4
+    blue_chip: 0.2
+    cash: 0.0
+  overheated:
+    small_cap: 0.5
+    etf: 0.4
+    blue_chip: 0.1
+    cash: 0.0
+  warm:
+    small_cap: 0.4
+    etf: 0.4
+    blue_chip: 0.2
+    cash: 0.0
+  cold:
+    small_cap: 0.15
+    etf: 0.45
+    blue_chip: 0.3
+    cash: 0.1
+  crisis:
+    small_cap: 0.0
+    etf: 0.4
+    blue_chip: 0.2
+    cash: 0.4
+risk:
+  warning_drawdown: 0.1
+  crisis_drawdown: 0.15
+  crisis_min_cash: 0.6
+  recovery_ma: 20
+  recovery_confirmation_days: 5
+  recovery_week_days: 5
+costs:
+  stock_buy_bps: 13.0
+  stock_sell_bps: 18.0
+  etf_buy_bps: 8.0
+  etf_sell_bps: 8.0
+optimization:
+  method: predefined economic grids scored on pre-2025 non-overlapping development
+    folds
+  development_end: '2024-12-31'
+  holdout_start: '2025-01-01'
+  objective: 'median annual return plus worst-fold reward, minus instability and drawdown
+    penalties; hard development-fold limits: max drawdown 25%, annual return floor
+    -10%'
+  selected:
+    small_cap:
+      ranking_weights: *id001
+    etf: {}
+    blue_chip:
+      low_vol_quantile: 0.4
+      ranking_weights: *id002

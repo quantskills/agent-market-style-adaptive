@@ -1,0 +1,233 @@
+run:
+  start_date: '2018-01-01'
+  end_date: '2026-09-19'
+  effective_end_date: '2026-09-18'
+  initial_cash: 1000000.0
+  benchmark: 000300.SH
+  annualization_days: 252
+data:
+  cache_dir: data/cache_pandadata_20260918
+  output_dir: outputs/pandadata_exact_20260918_replica/weekly
+  reference_share_float: data/cache_pandadata_20260918/share_float_reference.parquet
+  reference_security: data/cache_pandadata_20260918/security_master_extended.parquet
+  mcp_command: null
+  required_tables:
+  - stock_daily
+  - fund_daily
+  - index_daily
+  - fundamentals
+  - audit_opinion
+  - dividend
+  - security_master
+small_cap:
+  use_index_universe: true
+  index_symbol: 399100.SZ
+  preselect_float_cap_count: 200
+  preselect_total_cap_count: 100
+  # The supplied JoinQuant selector has no audit/dividend field.  Keep the
+  # point-in-time proxy mode for the replica and disclose the coverage limit
+  # in the report rather than silently treating it as a true audit opinion.
+  audit_mode: proxy_or_strict
+  market_cap_min: 1000000000.0
+  market_cap_max: 10000000000.0
+  revenue_min: 100000000.0
+  net_profit_min: 2000000.0
+  stock_num: 2
+  dynamic_holdings: true
+  market_stoploss: 0.95
+  max_price: 20.0
+  exclude_growth_boards: true
+  exclude_limit_up_down: true
+  skip_months: [1, 4]
+  no_trade_holdings:
+  - 511090.SH
+  - 511880.SH
+  ma_window: 10
+  high_deviation: 0.05
+  low_deviation: -0.05
+  holdings_high: 5
+  holdings_normal: 10
+  holdings_low: 20
+  dividend_lookback_years: 3
+  fixed_stop: 0.09
+  protect_trigger: 0.08
+  protect_floor: 0.01
+  atr_window: 14
+  atr_multiple: 3.0
+  ranking_weights: &id001
+    size: 1.0
+  require_recent_dividend: false
+etf:
+  symbols:
+  - 518880.SH
+  - 513100.SH
+  - 159915.SZ
+  - 510210.SH
+  - 159920.SZ
+  - 515000.SH
+  - 511010.SH
+  max_positions: 3
+  full_budget_when_fewer: false
+  three_day_floor: -0.05
+  momentum_windows:
+  - 20
+  - 60
+  - 120
+  momentum_weights:
+  - 0.5
+  - 0.3
+  - 0.2
+  short_ma: 20
+  long_ma: 60
+  amount_short: 5
+  amount_long: 20
+  relative_strength_min_percentile: 0.5
+  fixed_stop: 0.08
+  trailing_stop: 0.1
+  trailing_trigger: 0.05
+  minimum_score: -0.02
+  require_above_short_ma: true
+  require_amount_confirmation: true
+  require_ma_order: true
+blue_chip:
+  use_index_universe: true
+  big_index_symbol: 000300.SH
+  small_index_symbol: 399101.SZ
+  fixed_stop: 0.06
+  price_max: 50.0
+  pb_min: 0.0
+  pb_max: 6.0
+  revenue_min: 300000000.0
+  net_profit_min: 2000000.0
+  market_cap_min: 500000000.0
+  market_cap_max: 6000000000.0
+  exclude_limit_up_down: true
+  volatility_window: 60
+  low_vol_quantile: 0.6
+  holdings:
+    cold: 15
+    warm: 10
+    overheated: 5
+  dynamic_holdings: true
+  ranking_weights:
+    low_volatility: 0.15
+    momentum_120: 0.15
+    momentum_60: 0.25
+    pb: 0.15
+    roa: 0.1
+    roe: 0.2
+  allowed_regimes:
+  - cold
+  - warm
+  - overheated
+  regime_thresholds:
+    cold:
+      pb_max: 3.5
+      low_vol_quantile: 0.5
+      holdings:
+        cold: 15
+        warm: 10
+        overheated: 5
+    warm:
+      pb_max: 5.0
+      low_vol_quantile: 0.6
+      holdings:
+        cold: 15
+        warm: 10
+        overheated: 5
+    overheated:
+      pb_max: 6.0
+      low_vol_quantile: 0.7
+      holdings:
+        cold: 15
+        warm: 10
+        overheated: 5
+regime:
+  trend_window: 20
+  long_ma: 125
+  bull_threshold: 0.05
+  bear_threshold: -0.05
+  vol_window: 20
+  vol_low_quantile: 0.2
+  vol_high_quantile: 0.8
+  confirmation_days: 3
+allocation:
+  static:
+    small_cap: 0.4
+    etf: 0.4
+    blue_chip: 0.2
+    cash: 0.0
+  overheated:
+    small_cap: 0.4
+    etf: 0.4
+    blue_chip: 0.2
+    cash: 0.0
+  warm:
+    small_cap: 0.4
+    etf: 0.4
+    blue_chip: 0.2
+    cash: 0.0
+  cold:
+    small_cap: 0.4
+    etf: 0.4
+    blue_chip: 0.2
+    cash: 0.0
+  crisis:
+    small_cap: 0.4
+    etf: 0.4
+    blue_chip: 0.2
+    cash: 0.0
+sleeve_risk_budget:
+  method: fixed
+  fixed_sleeve_weights: true
+risk:
+  fixed_sleeve_weights: true
+  warning_drawdown: 0.1
+  crisis_drawdown: 0.15
+  crisis_min_cash: 0.6
+  recovery_ma: 20
+  recovery_confirmation_days: 5
+  recovery_week_days: 5
+costs:
+  stock_buy_bps: 13.0
+  stock_sell_bps: 18.0
+  etf_buy_bps: 8.0
+  etf_sell_bps: 8.0
+optimization:
+  method: predefined economic grids ranked by full-period annual return; development
+    folds retained for diagnostics
+  development_end: '2024-12-31'
+  holdout_start: '2025-01-01'
+  objective: full-period annual return primary; robust fold score and drawdown are
+    diagnostics only; no hard drawdown or 20% annual-return gate
+  selected:
+    small_cap:
+      market_cap_max: 10000000000.0
+      ranking_weights: *id001
+      require_recent_dividend: true
+      revenue_min: 100000000.0
+      net_profit_min: 2000000.0
+    etf:
+      frozen: true
+      source: config/optimized.rebalance.yaml
+      note: ETF参数沿用上一轮，不参与本轮优化
+    blue_chip:
+      low_vol_quantile: 0.6
+      pb_max: 6.0
+      price_max: 150.0
+      ranking_weights:
+        low_volatility: 0.15
+        momentum_120: 0.15
+        momentum_60: 0.25
+        pb: 0.15
+        roa: 0.1
+        roe: 0.2
+      revenue_min: 300000000.0
+  rebalance_frequency_selection:
+    primary_objective: adaptive full-period annual return
+    winner: weekly
+    daily_stops_enabled: true
+    leaderboard: outputs/rebalance_frequency_comparison_pandadata_exact_20260918/frequency_leaderboard.csv
+rebalance:
+  frequency: weekly
+  daily_stops_enabled: true

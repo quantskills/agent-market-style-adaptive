@@ -1,0 +1,11 @@
+name: low-vol-blue-chip
+entrypoint: SKILL.md
+canonical_root: SKILL.md
+runnable:
+  language: python
+  command: python skills/skill-low-vol-blue-chip/examples/run_low_vol_blue_chip.py
+  outputs: [selection.json, evidence.csv]
+interface:
+  display_name: "低波动白马选股"
+  short_description: "基于 PandaData 点时证据执行低波动白马选股，输出可追溯候选和筛选指标"
+  default_prompt: "使用 $low-vol-blue-chip 执行单日策略研究，读取缓存并输出候选及证据。"

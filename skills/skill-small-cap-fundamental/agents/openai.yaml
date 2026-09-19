@@ -1,0 +1,11 @@
+name: small-cap-fundamental
+entrypoint: SKILL.md
+canonical_root: SKILL.md
+runnable:
+  language: python
+  command: python skills/skill-small-cap-fundamental/examples/run_small_cap.py
+  outputs: [selection.json, evidence.csv]
+interface:
+  display_name: "小市值基本面选股"
+  short_description: "基于 PandaData 点时证据执行小市值基本面选股，输出可追溯候选和筛选指标"
+  default_prompt: "使用 $small-cap-fundamental 执行单日策略研究，读取缓存并输出候选及证据。"

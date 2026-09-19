@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-market-style-adaptive"
+version = "0.1.0"
+description = "Deterministic, Pandadata-backed market-style adaptive research agent"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "GPL-3.0-only"}
+dependencies = [
+  "numpy>=1.26",
+  "pandas>=2.2",
+  "pyarrow>=15",
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "pytest-cov>=5"]
+
+[project.scripts]
+market-style-agent = "agent_market_style_adaptive.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src", "skills/skill-small-cap-fundamental/src", "skills/skill-global-etf-rotation/src", "skills/skill-low-vol-blue-chip/src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "skills/skill-small-cap-fundamental/tests", "skills/skill-global-etf-rotation/tests", "skills/skill-low-vol-blue-chip/tests"]
+addopts = "-q"
