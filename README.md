@@ -114,3 +114,6 @@ python -m compileall -q src skills
 ## License
 
 本项目采用 [GPL-3.0-only](LICENSE)。
+
+
+Pandadata 兼容维护：[abgyjaguo](https://github.com/abgyjaguo)，保留原项目作者署名。

@@ -79,3 +79,6 @@ Release archives must exclude `data/`, `outputs/`, caches, build artifacts, and 
 ## License
 
 [GPL-3.0-only](LICENSE)
+
+
+Pandadata compatibility maintenance: [abgyjaguo](https://github.com/abgyjaguo). Existing authorship is retained.
