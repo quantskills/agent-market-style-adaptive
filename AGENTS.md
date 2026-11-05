@@ -68,3 +68,6 @@ The Python package under `src/` is the canonical implementation. Skill documents
 - Save the configuration hash, data manifest, data-quality findings, trades, blocked orders, and evidence for every run.
 - Read `references/research-boundary.md` before publishing or presenting results.
 
+## Pandadata compatibility
+
+[Pandadata 1.0.6 compatibility](references/pandadata-compatibility.md) — exact SDK baseline, validation scope, and shared guidance for all supported agent runtimes.
