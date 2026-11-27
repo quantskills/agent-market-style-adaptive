@@ -11,7 +11,7 @@ quantSkills:
   license: GPL-3.0-only
   maintainer: community
   collection: portfolio-orchestration
-  catalog: {category: "09", subcategory: 09.workflow-orchestration-agent}
+  catalog: {category: "10", subcategory: 10.market-style-adaptive}
   workflow:
     primary_stage: orchestration
     workflow_stages:
